@@ -1,0 +1,38 @@
+<html>
+	<head>
+		<script type="text/javascript" src="jquery.min.js"></script>
+	</head>
+	<body>
+		<input type="file" id="file"/>
+		<input type="button" id="upload" value="OK" />
+		<script>
+			$(function() {
+				$("#upload").click(uploadFile);
+			});
+
+			function uploadFile() {
+				let formData = new FormData();
+				let file = $("#file")[0].files[0];
+				formData.append("file", file);
+
+				$.ajax(
+				{
+					type: "POST",
+					url: "../image.php?resizeWidth=1000&orientation=landscape",
+					contentType: false,
+					cache: false,
+					processData: false,
+					data: formData,
+					success: function (data, textStatus, jqXHR) {
+						console.info("success");
+						console.log(data);
+					},
+					error: function (jqXHR, textStatus, errorThrown) {
+						console.info("error");
+						console.log(jqXHR);
+					}
+				});
+			}
+		</script>
+	</body>
+</html>
