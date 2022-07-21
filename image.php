@@ -85,15 +85,19 @@ function Post()
 function createSubfolders($webdavFolderUrl, $config) {
 	global $logger;
 	$logger->info("creating subfolders");
+
+	if ($webdavFolderUrl[strlen($webdavFolderUrl) - 1] == "/") {
+		$webdavFolderUrl = substr($webdavFolderUrl, 0, strlen($webdavFolderUrl) - 1);
+	}
 	
 	$segments = explode('/', $webdavFolderUrl);
 	$webdavSubfolderUrl = "";
 	
 	for($i = 0; $i < sizeof($segments); $i++) {
-	
+
 		$webdavSubfolderUrl.=$segments[$i]."/";
 		
-		if (stripos($webdavSubfolderUrl, $config["webdavServerUrl"]."/".$config["webdavFundstellenSubpath"]) === false) {
+		if (stripos($webdavSubfolderUrl, $config["webdavServerUrl"].$config["webdavFundstellenSubpath"]) === false) {
 			continue;
 		}
 
