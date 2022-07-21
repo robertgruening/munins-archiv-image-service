@@ -1,34 +1,57 @@
+<!doctype html>
 <html>
 	<head>
+		<meta charset="utf-8">
 		<script type="text/javascript" src="jquery.min.js"></script>
 	</head>
 	<body>
-		<input type="file" id="file"/>
+		<label for="textboxKontextPath">Kontextpfad:</label><br>
+		<input type="text" id="textboxKontextPath" value="test/a/b/c/"/><br/>
+		<label for="textboxNewWidth">Neue Breite:</label><br>
+		<input type="number" id="textboxNewWidth" value="1000"/><br/>
+		<label for="selectNewOrientation">Neue Ausrichtung:</label><br>
+		<select id="selectNewOrientation" >
+			<option value="landscape" selected>Querformat</option>
+			<option value="portrait">Hochformat</option>
+		</select><br/>
+		<label for="inputFile">Kontextpfad:</label><br>
+		<input type="file" id="inputFile"/><br/>
 		<input type="button" id="upload" value="OK" />
+		<br/>
+		<textarea id=textareaLog style="width:500px;height:80px"></textarea>
+		<img id=imageRequest />
+		<img id=imageResponse />
 		<script>
 			$(function() {
 				$("#upload").click(uploadFile);
 			});
 
 			function uploadFile() {
+				let kontextPath = $("#textboxKontextPath").val();
+				let newWidth = $("#textboxNewWidth").val();
+				let newOrientation = $("#selectNewOrientation").val();
 				let formData = new FormData();
-				let file = $("#file")[0].files[0];
+				let file = $("#inputFile")[0].files[0];
 				formData.append("file", file);
+				
+				$("#imageRequest").attr("src", file[0]);
 
 				$.ajax(
 				{
 					type: "POST",
-					url: "../image.php?resizeWidth=1000&orientation=landscape",
+					url: "../image.php?newWidth="+newWidth+"&orientation="+newOrientation+"&kontext="+kontextPath,
 					contentType: false,
 					cache: false,
 					processData: false,
 					data: formData,
 					success: function (data, textStatus, jqXHR) {
-						console.info("success");
+						console.log("success");
+						$("#textareaLog").append("success\n");
 						console.log(data);
 					},
 					error: function (jqXHR, textStatus, errorThrown) {
-						console.info("error");
+						console.error("error");
+						$("#textareaLog").append("error\n");
 						console.log(jqXHR);
 					}
 				});
