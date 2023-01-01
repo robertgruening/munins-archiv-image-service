@@ -4,6 +4,8 @@ ini_set("display_errors", 1);
 
 include_once(__DIR__."/logger.php");
 
+header("Access-Control-Allow-Origin:*");
+
 if ($_SERVER["REQUEST_METHOD"] == "POST")
 {
     Post();
@@ -71,7 +73,7 @@ function Post()
 	$config = array();
 	$config["webdavUsername"] = "aaf";
 	$config["webdavPassword"] = "gwf";
-	$config["webdavServerUrl"] = "https://127.0.0.1/webdav/";
+	$config["webdavServerUrl"] = "https://192.168.0.220:9111/remote.php/dav/files/aaf/AAF/";
 	$config["webdavFundstellenSubpath"] = "Fundstellen/Akten/";
 	
 	$logger->debug(move_uploaded_file($file["tmp_name"], $absoluteTempDirectory."/".$file["name"]));
@@ -165,7 +167,6 @@ function changeImageWidth($absoluteFilePath, $newWidth) {
 	$command = "mogrify ".
 		"-resize ".$newWidth."x ".
 		"'".$absoluteFilePath."';";
-	
 	exec($command, $output, $result);
 	
 	$logger->debug("output: ".print_r($output));
